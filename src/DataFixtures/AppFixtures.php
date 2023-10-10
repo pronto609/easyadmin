@@ -33,7 +33,7 @@ class AppFixtures extends Fixture
         UserFactory::new()
             ->withAttributes([
                 'email' => 'moderatoradmin@example.com',
-                'plainPassword' => 'adminpass',
+                'plainPassword' => 'tada',
             ])
             ->promoteRole('ROLE_MODERATOR')
             ->create();
