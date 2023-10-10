@@ -16,8 +16,8 @@ class AppFixtures extends Fixture
         // Load Users
         UserFactory::new()
             ->withAttributes([
-                'email' => 'superadmin@example.com',
-                'plainPassword' => 'adminpass',
+                'email' => 'celo@example.com',
+                'plainPassword' => 'tada',
             ])
             ->promoteRole('ROLE_SUPER_ADMIN')
             ->create();
@@ -25,7 +25,7 @@ class AppFixtures extends Fixture
         UserFactory::new()
             ->withAttributes([
                 'email' => 'admin@example.com',
-                'plainPassword' => 'adminpass',
+                'plainPassword' => 'tada',
             ])
             ->promoteRole('ROLE_ADMIN')
             ->create();

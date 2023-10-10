@@ -9,6 +9,7 @@
         "doctrine/doctrine-bundle": "^2.10",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.16",
+        "easycorp/easyadmin-bundle": "^4.7",
         "knplabs/knp-markdown-bundle": "dev-symfony6",
         "knplabs/knp-time-bundle": "^2.1",
         "sensio/framework-extra-bundle": "^6.2",
