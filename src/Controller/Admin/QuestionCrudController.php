@@ -32,7 +32,8 @@ class QuestionCrudController extends AbstractCrudController
             $pageName !== Crud::PAGE_NEW
             )
         ;
-        yield Field::new('name');
+        yield Field::new('name')
+        ->setSortable(false);
         yield AssociationField::new('topic');
         yield TextareaField::new('question')
             ->hideOnIndex();
@@ -59,6 +60,15 @@ class QuestionCrudController extends AbstractCrudController
         yield Field::new('createdAt')
         ->hideOnForm();
 
+    }
+
+    public function configureCrud(Crud $crud): Crud
+    {
+        return parent::configureCrud($crud)
+            ->setDefaultSort([
+                'askedBy.enabled' => 'DESC',
+                'createdAt' => 'DESC'
+            ]);
     }
 
 }
