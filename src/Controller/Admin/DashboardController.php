@@ -89,5 +89,11 @@ class DashboardController extends AbstractDashboardController
             ->addWebpackEncoreEntry('admin');
     }
 
+    public function configureCrud(): Crud
+    {
+        return parent::configureCrud()
+            ->setDefaultSort(['id' => 'DESC']);
+    }
+
 
 }
