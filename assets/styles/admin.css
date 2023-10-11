@@ -5,3 +5,8 @@
 .main-content {
     margin-bottom: 100px;
 }
+
+.marrkdown-preview {
+    margin-top: 10px;
+    border: 2px dashed yellow;
+}
