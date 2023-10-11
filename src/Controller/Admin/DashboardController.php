@@ -27,20 +27,21 @@ class DashboardController extends AbstractDashboardController
 
     public function __construct(
         private readonly QuestionRepository $questionRepository,
-        private readonly ChartBuilderInterface $chartBuilder
     ) {
     }
 
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/admin', name: 'admin')]
-    public function index(): Response
+    public function index(ChartBuilderInterface $chartBuilder = null): Response
     {
+        assert(null !== $chartBuilder);
+
         $latestQuestions = $this->questionRepository->findLatest();
         $topVoted = $this->questionRepository->findTopVoted();
         return $this->render('admin/index.html.twig', [
             'latestQuestions' => $latestQuestions,
             'topVoted' => $topVoted,
-            'chart' => $this->createChart()
+            'chart' => $this->createChart($chartBuilder)
         ]);
 
         // Option 1. You can make your dashboard redirect to some common page of your backend
@@ -109,9 +110,9 @@ class DashboardController extends AbstractDashboardController
             ->setDefaultSort(['id' => 'DESC']);
     }
 
-    private function createChart(): Chart
+    private function createChart(ChartBuilderInterface $chartBuilder): Chart
     {
-        $chart = $this->chartBuilder->createChart(Chart::TYPE_LINE);
+        $chart = $chartBuilder->createChart(Chart::TYPE_LINE);
 
         $chart->setData([
             'labels' => ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
