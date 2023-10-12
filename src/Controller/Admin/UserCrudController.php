@@ -3,8 +3,13 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User;
+use Doctrine\ORM\QueryBuilder;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AvatarField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
@@ -22,6 +27,23 @@ class UserCrudController extends AbstractCrudController
     public static function getEntityFqcn(): string
     {
         return User::class;
+    }
+
+    public function createIndexQueryBuilder(
+        SearchDto $searchDto,
+        EntityDto $entityDto,
+        FieldCollection $fields,
+        FilterCollection $filters
+    ): QueryBuilder {
+        $queryBuilder = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
+
+        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+            return $queryBuilder;
+        }
+
+        return $queryBuilder
+            ->andWhere('entity.id = :id')
+            ->setParameter('id', $this->getUser()->getId());
     }
 
 
