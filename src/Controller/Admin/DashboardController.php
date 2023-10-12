@@ -70,17 +70,23 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-dashboard');
-        yield MenuItem::linkToCrud('Questions', 'fa fa-question-circle', Question::class)
-        ->setPermission('ROLE_MODERATOR')
-        ->setController(QuestionCrudController::class);
-        yield MenuItem::linkToCrud('Pending Approval', 'far fa-question-circle', Question::class)
-        ->setPermission('ROLE_MODERATOR')
-        ->setController(QuestionPendingApprovalCrugController::class);
+        yield MenuItem::section('Content');
+        yield MenuItem::subMenu('QUestions', 'fa fa-question-circle')->setSubItems([
+             MenuItem::linkToCrud('All', 'fa fa-list', Question::class)
+                ->setPermission('ROLE_MODERATOR')
+                ->setController(QuestionCrudController::class),
+             MenuItem::linkToCrud('Pending Approval', 'far fa-warning', Question::class)
+                ->setPermission('ROLE_MODERATOR')
+                ->setController(QuestionPendingApprovalCrugController::class),
+        ]);
         yield MenuItem::linkToCrud('Answer', 'fa fa-comments', Answer::class);
         yield MenuItem::linkToCrud('Topic', 'fa fa-folder', Topic::class);
         yield MenuItem::linkToCrud('User', 'fa fa-users', User::class);
 //        yield MenuItem::linkToRoute('Homepage', 'fa fa-home', 'app_homepage');
+        yield MenuItem::section();
         yield MenuItem::linkToUrl('Homepage', 'fa fa-home', $this->generateUrl('app_homepage'));
+        yield MenuItem::linkToUrl('StackOverflow', 'fab fa-stack-overflow', 'https://stackoverflow.com')
+        ->setLinkTarget('_blank');
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
     }
 
