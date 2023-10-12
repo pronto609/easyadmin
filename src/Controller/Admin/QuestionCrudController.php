@@ -4,6 +4,8 @@ namespace App\Controller\Admin;
 
 use App\EasyAdmin\VotesField;
 use App\Entity\Question;
+use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -16,10 +18,16 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Core\Security;
 
 #[IsGranted('ROLE_MODERATOR')]
 class QuestionCrudController extends AbstractCrudController
 {
+    public function __construct(
+        private readonly Security $security
+    ) {
+    }
+
     public static function getEntityFqcn(): string
     {
         return Question::class;
@@ -74,6 +82,8 @@ class QuestionCrudController extends AbstractCrudController
         ->autocomplete();
         yield Field::new('createdAt')
         ->hideOnForm();
+        yield AssociationField::new('updatedBy')
+        ->onlyOnDetail();
 
     }
 
@@ -105,5 +115,17 @@ class QuestionCrudController extends AbstractCrudController
             ->add('votes')
             ->add('name');
     }
+
+    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        $user = $this->security->getUser();
+        if (!$user instanceof User) {
+            throw new \LogicException('Currently logged in user is not as instance of User?!');
+        }
+
+        $entityInstance->setUpdatedBy($user);
+        parent::updateEntity($entityManager, $entityInstance);
+    }
+
 
 }
