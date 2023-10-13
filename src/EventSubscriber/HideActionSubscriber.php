@@ -27,7 +27,7 @@ class HideActionSubscriber implements EventSubscriberInterface
         // disable action entirely for delete, detail & edit pages
         $question = $adminContext->getEntity()->getInstance();
         if ($question instanceof Question && $question->getIsApproved()) {
-            $crudDto->getActionsConfig()->disableActions(Action::DELETE);
+            $crudDto->getActionsConfig()->disableActions([Action::DELETE]);
         }
 
         // returns the array of actual actions that will be enabled
